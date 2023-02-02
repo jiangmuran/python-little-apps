@@ -1,4 +1,5 @@
 from flask import Flask,request
+import sys
 
 userlist = []
 
@@ -30,4 +31,5 @@ def jumpa():
 	return jumptext
 
 if __name__ == '__main__':
-	app.run(debug=True,port=1145)
+
+	app.run(debug=True,port=int(sys.argv[1]))
