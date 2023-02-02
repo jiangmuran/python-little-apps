@@ -18,6 +18,7 @@ def clear():
 
 @app.route('/changetext/')
 def changetext():
+	global jumptext
 	jumptext=request.args.get('text')
 	return '修改成功！'
 
