@@ -27,7 +27,7 @@ def changetext():
 def jumpa():
 	id = request.args.get('jumpid')
 	ip = request.remote_addr
-	userlist.append({'id':id,'ip':ip,'time':str(time.time)})
+	userlist.append({'id':id,'ip':ip,'time':str(int(time.time()*1000))})
 	return jumptext
 
 if __name__ == '__main__':
