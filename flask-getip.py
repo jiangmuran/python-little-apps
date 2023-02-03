@@ -1,5 +1,5 @@
 from flask import Flask,request
-import sys
+import sys,time
 
 userlist = []
 
@@ -27,7 +27,7 @@ def changetext():
 def jumpa():
 	id = request.args.get('jumpid')
 	ip = request.remote_addr
-	userlist.append({'id':id,'ip':ip})
+	userlist.append({'id':id,'ip':ip,'time':str(time.time)})
 	return jumptext
 
 if __name__ == '__main__':
