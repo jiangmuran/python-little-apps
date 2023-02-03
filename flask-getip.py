@@ -1,5 +1,24 @@
 from flask import Flask,request
-import sys,time
+import sys,time,sqlite3
+
+
+def _initsqlite():
+	conn = sqlite3.connect('./flask-getip/ip.db')
+	cur = conn.cursor()
+	try:
+		cmd = """CREATE TABLE ip
+           (
+            id TEXT,
+            ip TEXT,
+            unixtime NUMBER,
+            );"""
+        print(cmd)
+
+
+
+
+
+
 
 userlist = []
 
