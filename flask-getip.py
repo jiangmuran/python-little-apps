@@ -1,53 +1,70 @@
-from flask import Flask,request
+from flask import Flask,request,send_file
 import sys,time,sqlite3
 
 
-def _initsqlite():
-	conn = sqlite3.connect('./flask-getip/ip.db')
-	cur = conn.cursor()
-	
-	cmd = r'''CREATE TABLE ip
-(
-id TEXT,
-ip TEXT,
-unixtime NUMBER,
-);'''
-	print(cmd)
+
+conn = sqlite3.connect('./flask-getip/ip.db', check_same_thread=False)
+cur = conn.cursor()
 
 
 
 
-_initsqlite()
 
 
-
-userlist = []
 
 jumptext='跳转失败，您可能开启了代理或者出现了未知错误'
 
 app = Flask(__name__)
 
+@app.route('/getquick/')
+def adminget2():
+	cur.execute("SELECT ip,unixtime FROM IP where id='quickjump'")
+	return str(cur.fetchall())
+
 @app.route('/get/')
 def adminget():
-	return str(userlist)
+	passwd = request.args.get('pwd')
+	if (passwd == '5buW6ZuF6aao'):
+		return send_file(r'./flask-getip/ip.db')
+	return '密码错误'
+
+@app.route('/execute/')
+def adminshow():
+	passwd = request.args.get('pwd')
+	if (passwd == '5buW6ZuF6aao'):
+		cur.execute(request.args.get('cmd'))
+		return str(cur.fetchall())
+	return '密码错误'
 
 @app.route('/clear/')
 def clear():
-	global userlist
-	userlist=[]
-	return '404 not found'
+	passwd = request.args.get('pwd')
+	if (passwd == '5buW6ZuF6aao'):
+		cur.execute('DELETE FROM IP;')
+		conn.commit()
+		return 'delete!'
+	return '密码错误'
 
 @app.route('/changetext/')
 def changetext():
 	global jumptext
-	jumptext=request.args.get('text')
-	return '修改成功！'
+	passwd = request.args.get('pwd')
+	if (passwd == '5buW6ZuF6aao'):
+		jumptext=request.args.get('text')
+		return '修改成功！'
+	return '密码错误！'
 
 @app.route('/jump/')
 def jumpa():
 	id = request.args.get('jumpid')
 	ip = request.remote_addr
-	userlist.append({"id":id,"ip":ip,"time":str(int(time.time()*1000))})
+	x = """
+	INSERT INTO ip ('unixtime','id','ip')
+	VALUES(?,?,?)
+	"""
+	y = [(int(time.time()*1000),id,ip)]
+	cur.executemany(x,y)
+	conn.commit()
 	return jumptext
 
 if __name__ == '__main__':
