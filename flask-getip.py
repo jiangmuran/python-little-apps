@@ -28,6 +28,17 @@ def adminget():
 		return send_file(r'./flask-getip/ip.db')
 	return '密码错误'
 
+@app.route('/admin/')
+def admin():
+	passwd = request.args.get('pwd')
+	cur.execute('SELECT id FROM pwds WHERE pwd = "'+passwd+'"')
+	okid=cur.fetchall()
+	if (len(okid) >= 1):
+		cur.execute("SELECT unixtime,ip FROM IP where id='"+okid[0][0]+"'")
+		return str(cur.fetchall())
+	else:
+		return '不可用的密码'
+
 @app.route('/execute/')
 def adminshow():
 	passwd = request.args.get('pwd')

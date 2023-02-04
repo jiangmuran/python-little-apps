@@ -1,0 +1,10 @@
+PRAGMA foreign_keys=OFF;
+BEGIN TRANSACTION;
+CREATE TABLE ip(
+id text,
+ip text,
+unixtime number);
+CREATE TABLE pwds(
+pwd TEXT,
+id TEXT);
+COMMIT;
