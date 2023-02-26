@@ -32,7 +32,7 @@ def create_folder():
 
 @app.route('/api/list-files', methods=['GET'])
 def list_files():
-    dir_path = request.args.get('dir', '/')
+    dir_path = request.args.get('dir', './')
     files = []
     for filename in os.listdir(os.path.join(app.config['UPLOAD_FOLDER'], dir_path)):
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], dir_path, filename)
